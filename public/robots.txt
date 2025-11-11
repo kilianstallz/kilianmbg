@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://kilianmbg.dev/sitemap-index.xml
