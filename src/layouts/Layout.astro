@@ -1,22 +1,40 @@
+---
+import "../styles/global.css";
+---
+
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
-		<slot />
-	</body>
-</html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Kilian Minichberger — kilianmbg.dev</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script defer src="https://umami.kilianmbg.dev/script.js" data-website-id="acfe40ee-e113-4eed-9acc-116c64a2b99d"></script>
+  </head>
+  <body class="antialiased text-gray-900 bg-white min-h-screen">
+    <div class="container">
+      <header class="flex items-center justify-between py-8">
+        <div>
+          <a href="/" class="text-xl font-semibold">Kilian Minichberger</a>
+          <div class="text-sm text-gray-600">Developer • Engineer</div>
+        </div>
+        <nav class="flex items-center gap-6">
+          <a class="header-link" href="/articles">Articles</a>
+          <a class="header-link" href="/about">About</a>
+        </nav>
+      </header>
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>
+      <main>
+        <slot />
+      </main>
+
+      <footer class="py-12 text-center text-sm text-gray-500">
+        <div>© {new Date().getFullYear()} Kilian Minichberger — kilianmbg.dev</div>
+      </footer>
+    </div>
+  </body>
+</html>

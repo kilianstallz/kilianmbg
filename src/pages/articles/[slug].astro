@@ -1,0 +1,23 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, getEntryBySlug } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('articles');
+  return posts.map((p) => ({ params: { slug: p.slug } }));
+}
+
+const {slug} = Astro.params;
+const post = await getEntryBySlug('articles', slug) as any;
+const rendered = await post.render();
+---
+
+<Layout>
+  <article class="prose mt-8 max-w-none">
+    <h1>{post.data.title}</h1>
+    <p class="text-sm text-gray-500">{post.data.pubDate}</p>
+    <div class="mt-6">
+      <rendered.Content />
+    </div>
+  </article>
+</Layout>

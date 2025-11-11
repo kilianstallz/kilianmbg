@@ -1,0 +1,22 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('articles') as {slug:string; data:any}[];
+---
+
+<Layout>
+  <section class="py-12">
+    <h1 class="text-2xl font-semibold">Articles</h1>
+    <ul class="mt-6 space-y-6">
+      {posts.map((p) => (
+        <li>
+          <a class="block" href={`/articles/${p.slug}`}>
+            <div class="text-lg font-medium">{p.data.title}</div>
+            <div class="text-sm text-gray-500">{p.data.description}</div>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+</Layout>
