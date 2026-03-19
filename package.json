@@ -11,10 +11,10 @@
   "author": "Kilian Minichberger",
   "dependencies": {
     "@astrojs/sitemap": "^3.6.0",
-    "@astrojs/solid-js": "^5.1.3",
-    "@astrojs/tailwind": "^4.0.0",
+    "@astrojs/solid-js": "^6.0.0",
+    "@astrojs/tailwind": "^6.0.0",
     "@tailwindcss/vite": "^4.1.17",
-    "astro": "^5.15.5",
+    "astro": "^6.0.0",
     "autoprefixer": "^10.4.0",
     "solid-js": "^1.9.10",
     "tailwindcss": "^4.1.17"
