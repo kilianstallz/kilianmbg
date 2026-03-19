@@ -1,3 +1,27 @@
+---
+title: "This Week in AI — What This Series Is About"
+description: "An introduction to the This Week in AI series: how it’s structured, who it’s for, and how to use it as a weekly edge in your engineering and product work."
+pubDate: "2026-03-18"
+updatedDate: "2026-03-18"
+slug: "this-week-in-ai-intro"
+series: "This Week in AI"
+type: "intro"
+draft: false
+tags:
+  - ai
+  - meta
+  - newsletter
+  - software-engineering
+  - product
+readingTime: 6
+author: "Kilian Stallinger"
+seo:
+  canonical: "/articles/this-week-in-ai-intro"
+  ogTitle: "This Week in AI — Introduction"
+  ogDescription: "Why this series exists, how it’s structured, and how to get the most value from it."
+  ogType: "article"
+---
+
 # This Week in AI  
 ## Welcome to the Series
 
