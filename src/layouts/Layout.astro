@@ -1,5 +1,40 @@
 ---
 import "../styles/global.css";
+import "@fontsource/eb-garamond/400.css";
+import "@fontsource/eb-garamond/400-italic.css";
+import "@fontsource/eb-garamond/500.css";
+import "@fontsource/eb-garamond/500-italic.css";
+import "@fontsource/ibm-plex-sans/400.css";
+import "@fontsource/ibm-plex-sans/400-italic.css";
+import "@fontsource/ibm-plex-sans/500.css";
+
+interface Props {
+  title?: string
+  description?: string
+  canonical?: string
+  ogType?: 'website' | 'article'
+  article?: {
+    publishedTime?: string
+    tags?: string[]
+    author?: string
+  }
+  jsonLd?: object | object[]
+  noindex?: boolean
+}
+
+const {
+  title,
+  description = 'Developer building small, fast web experiences. Software Engineer focused on cloud-native software, data pipelines, and great user experiences.',
+  canonical,
+  ogType = 'website',
+  article,
+  jsonLd,
+  noindex = false,
+} = Astro.props
+
+const SITE_URL = 'https://kilianmbg.dev'
+const pageTitle = title ? `${title} — kilianmbg.dev` : 'Kilian Minichberger — kilianmbg.dev'
+const canonicalUrl = canonical ?? Astro.url.href
 ---
 
 <!doctype html>
@@ -10,31 +45,71 @@ import "../styles/global.css";
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <link rel="sitemap" href="/sitemap-index.xml" />
-    <title>Kilian Minichberger — kilianmbg.dev</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <script defer src="https://umami.kilianmbg.dev/script.js" data-website-id="acfe40ee-e113-4eed-9acc-116c64a2b99d"></script>
+
+    <!-- Primary meta -->
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+
+    <!-- Open Graph -->
+    <meta property="og:site_name" content="kilianmbg.dev" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:locale" content="en_US" />
+    {article?.publishedTime && (
+      <meta property="article:published_time" content={article.publishedTime} />
+    )}
+    {article?.author && (
+      <meta property="article:author" content={article.author} />
+    )}
+    {article?.tags?.map(tag => (
+      <meta property="article:tag" content={tag} />
+    ))}
+
+    <!-- Twitter / X Card -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@kilianstallz" />
+    <meta name="twitter:creator" content="@kilianstallz" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+
+    <!-- JSON-LD structured data -->
+    {jsonLd && (
+      <script type="application/ld+json" set:html={JSON.stringify(
+        Array.isArray(jsonLd) ? jsonLd : jsonLd
+      )} />
+    )}
+
+    <!-- Umami: self-hosted, no cookies, GDPR-compliant -->
+    <script defer
+      src="https://umami.kilianmbg.dev/script.js"
+      data-website-id="acfe40ee-e113-4eed-9acc-116c64a2b99d"
+      data-domains="kilianmbg.dev">
+    </script>
   </head>
-  <body class="antialiased text-gray-900 bg-white min-h-screen">
-    <div class="container">
-      <header class="flex items-center justify-between py-8">
-        <div>
-          <a href="/" class="text-xl font-semibold">Kilian Minichberger</a>
-          <div class="text-sm text-gray-600">Developer • Engineer</div>
-        </div>
-        <nav class="flex items-center gap-6">
-          <a class="header-link" href="/articles">Articles</a>
-          <a class="header-link" href="/about">About</a>
+  <body>
+    <div class="site-wrapper">
+      <header class="site-header">
+        <a href="/" class="site-title">Kilian Minichberger</a>
+        <nav class="site-nav">
+          <a href="/articles">Writing</a>
+          <a href="/about">About</a>
         </nav>
       </header>
 
-      <main>
+      <main class="site-main">
         <slot />
       </main>
 
-      <footer class="py-12 text-center text-sm text-gray-500">
-        <div>© {new Date().getFullYear()} Kilian Minichberger — kilianmbg.dev</div>
+      <footer class="site-footer">
+        <span>© {new Date().getFullYear()} Kilian Minichberger</span>
+        <span class="footer-sep">·</span>
+        <a href="/impressum">Impressum</a>
+        <span class="footer-sep">·</span>
+        <span class="footer-privacy">Analytics: <a href="https://umami.kilianmbg.dev" target="_blank" rel="noopener">Umami</a> — no cookies</span>
       </footer>
     </div>
   </body>

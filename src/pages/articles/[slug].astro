@@ -1,23 +1,66 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { getCollection, getEntryBySlug } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
   const posts = await getCollection('articles');
-  return posts.map((p) => ({ params: { slug: p.slug } }));
+  return posts.map((p) => ({ params: { slug: p.id }, props: { post: p } }));
 }
 
-const {slug} = Astro.params;
-const post = await getEntryBySlug('articles', slug) as any;
-const rendered = await post.render();
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const canonicalUrl = `https://kilianmbg.dev/articles/${post.id}`;
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": post.data.title,
+  "description": post.data.description ?? '',
+  "url": canonicalUrl,
+  "datePublished": post.data.pubDate ?? '',
+  "dateModified": post.data.updatedDate ?? post.data.pubDate ?? '',
+  "author": {
+    "@type": "Person",
+    "name": post.data.author ?? 'Kilian Minichberger',
+    "url": "https://kilianmbg.dev"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Kilian Minichberger",
+    "url": "https://kilianmbg.dev"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": canonicalUrl
+  },
+  ...(post.data.tags ? { "keywords": post.data.tags.join(', ') } : {})
+};
 ---
 
-<Layout>
-  <article class="prose mt-8 max-w-none">
-    <h1>{post.data.title}</h1>
-    <p class="text-sm text-gray-500">{post.data.pubDate}</p>
-    <div class="mt-6">
-      <rendered.Content />
-    </div>
-  </article>
+<Layout
+  title={post.data.title}
+  description={post.data.description}
+  canonical={canonicalUrl}
+  ogType="article"
+  article={{
+    publishedTime: post.data.pubDate,
+    tags: post.data.tags,
+    author: post.data.author ?? 'Kilian Minichberger',
+  }}
+  jsonLd={jsonLd}
+>
+  <div class="article-page">
+    <header class="article-header">
+      <h1 class="article-title">{post.data.title}</h1>
+      <div class="article-meta">
+        {post.data.pubDate && <time datetime={post.data.pubDate}>{post.data.pubDate}</time>}
+        {post.data.pubDate && post.data.description && <span class="article-meta-sep">·</span>}
+        {post.data.description && <span>{post.data.description}</span>}
+      </div>
+    </header>
+    <article class="prose max-w-none">
+      <Content />
+    </article>
+  </div>
 </Layout>

@@ -1,31 +1,74 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
-const posts = await getCollection('articles') as any;
+
+const posts = (await getCollection('articles')).sort(
+  (a, b) => new Date(b.data.pubDate ?? 0).getTime() - new Date(a.data.pubDate ?? 0).getTime()
+);
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Kilian Minichberger",
+    "url": "https://kilianmbg.dev",
+    "jobTitle": "Software Engineer",
+    "sameAs": [
+      "https://github.com/kilianstallz",
+      "https://bsky.app/profile/kilianstallz.dev",
+      "https://www.linkedin.com/in/kilian-minichberger-9815a5169"
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "kilianmbg.dev",
+    "url": "https://kilianmbg.dev",
+    "author": { "@type": "Person", "name": "Kilian Minichberger" }
+  }
+];
 ---
 
-<Layout>
-  <section class="py-12">
-    <h1 class="text-4xl font-extrabold">Kilian Minichberger</h1>
-    <p class="mt-4 text-gray-600 max-w-xl">Developer — building small, fast web experiences. Formerly Fullstack at Devjobs.at; currently Software Engineer at Findustrial. I normally focus on cloud native software, flowing data & great user experiences.</p>
-
-    <div class="mt-6 flex flex-wrap items-center gap-3">
-      <a class="px-4 py-2 bg-black text-white rounded-md" href="/articles">Articles</a>
-      <a class="px-4 py-2 border border-gray-200 rounded-md text-gray-700" href="/about">About</a>
-      <a class="px-4 py-2 border border-gray-200 rounded-md text-gray-700" href="https://github.com/kilianstallz" target="_blank" rel="noopener">GitHub</a>
-      <a class="px-4 py-2 border border-gray-200 rounded-md text-gray-700" href="https://bsky.app/profile/kilianstallz.dev" target="_blank" rel="noopener">Bluesky</a>
-      <a class="px-4 py-2 border border-gray-200 rounded-md text-gray-700" href="https://www.linkedin.com/in/kilian-minichberger-9815a5169" target="_blank" rel="noopener">LinkedIn</a>
+<Layout
+  description="Developer building small, fast web experiences. Software Engineer focused on cloud-native software, data pipelines, and great user experiences."
+  jsonLd={jsonLd}
+>
+  <section class="home-hero">
+    <h1 class="home-name">Kilian Minichberger</h1>
+    <p class="home-bio">
+      Developer — building small, fast web experiences. Formerly Fullstack at
+      <a href="https://devjobs.at" target="_blank" rel="noopener" data-umami-event="click-devjobs">Devjobs.at</a>;
+      currently Software Engineer at Findustrial. I focus on cloud-native software,
+      flowing data &amp; great user experiences.
+    </p>
+    <div class="home-links">
+      <a href="/articles" class="primary" data-umami-event="nav-writing">Writing</a>
+      <span class="sep">·</span>
+      <a href="/about" data-umami-event="nav-about">About</a>
+      <span class="sep">·</span>
+      <a href="https://github.com/kilianstallz" target="_blank" rel="noopener" data-umami-event="click-github">GitHub</a>
+      <span class="sep">·</span>
+      <a href="https://bsky.app/profile/kilianstallz.dev" target="_blank" rel="noopener" data-umami-event="click-bluesky">Bluesky</a>
+      <span class="sep">·</span>
+      <a href="https://www.linkedin.com/in/kilian-minichberger-9815a5169" target="_blank" rel="noopener" data-umami-event="click-linkedin">LinkedIn</a>
     </div>
   </section>
 
-  <section class="py-8">
-    <h2 class="text-2xl font-semibold">Latest writing</h2>
-    <ul class="mt-4 space-y-4">
-      {posts.slice(0,3).map(({slug, data}) => (
-        <li>
-          <a class="block" href={`/articles/${slug}`}>
-            <div class="text-lg font-medium">{data.title}</div>
-            <div class="text-sm text-gray-500">{data.description}</div>
+  <section style="padding: 3rem 0 0;">
+    <p class="section-label">Latest writing</p>
+    <ul class="article-list">
+      {posts.slice(0, 3).map((p) => (
+        <li class="article-card">
+          <a
+            href={`/articles/${p.id}`}
+            data-umami-event="article-click"
+            data-umami-event-slug={p.id}
+          >
+            <span class="article-card-title">{p.data.title}</span>
+            <span class="article-card-date">{p.data.pubDate}</span>
+            {p.data.description && (
+              <span class="article-card-desc">{p.data.description}</span>
+            )}
           </a>
         </li>
       ))}
