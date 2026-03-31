@@ -10,7 +10,7 @@
   },
   "author": "Kilian Minichberger",
   "dependencies": {
-    "@astrojs/sitemap": "3.7.1",
+    "@astrojs/sitemap": "3.7.2",
     "@astrojs/solid-js": "^6.0.1",
     "@astrojs/tailwind": "^6.0.2",
     "@fontsource/eb-garamond": "^5.2.7",
